@@ -1,6 +1,14 @@
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 
-const TutorshipPage = () => {
+const TutorshipPage = ({ setTitle }) => {
+  const setLocalTitle = () => {
+    setTitle("Tutorías");
+  };
+
+  useEffect(() => {
+    setLocalTitle();
+  }, []);
   return (
     <>
       <Typography color="text.secondary">Tutorship</Typography>

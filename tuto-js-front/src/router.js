@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import CoursePage from "./pages/CoursePage";
@@ -10,6 +11,8 @@ import TutorPage from "./pages/TutorPage";
 import TutorshipPage from "./pages/TutorshipPage";
 
 export const AppRouter = () => {
+  const [title, setTitle] = useState("Tutorías");
+
   return useRoutes([
     {
       path: "/",
@@ -21,15 +24,15 @@ export const AppRouter = () => {
     },
     {
       path: "/tuto/",
-      element: <Layout />,
+      element: <Layout title={title} />,
       children: [
-        { path: "course", element: <CoursePage /> },
-        { path: "teacher", element: <TeacherPage /> },
-        { path: "student", element: <StudentPage /> },
-        { path: "section", element: <SectionPage /> },
-        { path: "tutor", element: <TutorPage /> },
-        { path: "tutorship", element: <TutorshipPage /> },
-        { path: "topic", element: <TopicPage /> },
+        { path: "course", element: <CoursePage setTitle={setTitle} /> },
+        { path: "teacher", element: <TeacherPage setTitle={setTitle} /> },
+        { path: "student", element: <StudentPage setTitle={setTitle} /> },
+        { path: "section", element: <SectionPage setTitle={setTitle} /> },
+        { path: "tutor", element: <TutorPage setTitle={setTitle} /> },
+        { path: "tutorship", element: <TutorshipPage setTitle={setTitle} /> },
+        { path: "topic", element: <TopicPage setTitle={setTitle} /> },
       ],
     },
   ]);

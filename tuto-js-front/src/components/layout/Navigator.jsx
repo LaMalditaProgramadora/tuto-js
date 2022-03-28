@@ -1,4 +1,3 @@
-import HomeIcon from "@mui/icons-material/Home";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -9,12 +8,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
 import { categories } from "./_categories";
-import { drawerWidth, item, itemCategory, itemWithoutHover } from "./_styles";
+import { drawerWidth, itemCategory, itemWithoutHover } from "./_styles";
 
-const Navigator = ({ changeTitle }) => {
-  const [selectedCategory, setSelectedCategory] = React.useState("Tutorías");
+const Navigator = ({ title, changeTitle }) => {
   const selectCategory = (c) => {
-    setSelectedCategory(c.id);
     changeTitle(c);
   };
 
@@ -43,7 +40,7 @@ const Navigator = ({ changeTitle }) => {
             {children.map((c) => (
               <ListItem disablePadding key={c.id} sx={{ color: "white" }}>
                 <ListItemButton
-                  selected={c.id === selectedCategory}
+                  selected={c.id === title}
                   sx={c.item}
                   onClick={() => selectCategory(c)}
                 >

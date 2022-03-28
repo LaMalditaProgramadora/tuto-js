@@ -9,9 +9,8 @@ import Navigator from "./Navigator";
 import { customTheme, drawerWidth } from "./_styles";
 import { useNavigate } from "react-router-dom";
 
-const Layout = () => {
+const Layout = ({ title }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [title, setTitle] = React.useState("T u t o r í a s");
   const navigate = useNavigate();
 
   const separateTitle = (titleString) => {
@@ -27,7 +26,6 @@ const Layout = () => {
   };
 
   const changeTitle = (c) => {
-    setTitle(separateTitle(c.id));
     navigate("/tuto/" + c.route, { replace: true });
   };
 
@@ -39,10 +37,13 @@ const Layout = () => {
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         >
-          <Navigator changeTitle={changeTitle} />
+          <Navigator title={title} changeTitle={changeTitle} />
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          <Header onDrawerToggle={handleDrawerToggle} title={title} />
+          <Header
+            onDrawerToggle={handleDrawerToggle}
+            title={separateTitle(title)}
+          />
           <Box
             component="main"
             sx={{ flex: 1, py: 4, px: 4, bgcolor: "#eaeff1" }}
