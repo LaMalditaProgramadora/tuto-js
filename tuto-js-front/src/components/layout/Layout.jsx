@@ -1,0 +1,61 @@
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import * as React from "react";
+import Content from "./Content";
+import Footer from "./Footer";
+import Header from "./Header";
+import Navigator from "./Navigator";
+import { customTheme, drawerWidth } from "./_styles";
+import { useNavigate } from "react-router-dom";
+
+const Layout = () => {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("T u t o r í a s");
+  const navigate = useNavigate();
+
+  const separateTitle = (titleString) => {
+    let titleAux = "";
+    for (let i = 0; i < titleString.length; i++) {
+      titleAux = titleAux.concat(titleString[i]).concat(" ");
+    }
+    return titleAux;
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const changeTitle = (c) => {
+    setTitle(separateTitle(c.id));
+    navigate("/tuto/" + c.route, { replace: true });
+  };
+
+  return (
+    <ThemeProvider theme={customTheme}>
+      <Box sx={{ display: "flex", minHeight: "100vh" }}>
+        <CssBaseline />
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        >
+          <Navigator changeTitle={changeTitle} />
+        </Box>
+        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <Header onDrawerToggle={handleDrawerToggle} title={title} />
+          <Box
+            component="main"
+            sx={{ flex: 1, py: 4, px: 4, bgcolor: "#eaeff1" }}
+          >
+            <Content />
+          </Box>
+          <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
+            <Footer />
+          </Box>
+        </Box>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default Layout;
