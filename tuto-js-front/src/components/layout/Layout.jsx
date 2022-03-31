@@ -1,15 +1,16 @@
+import { Snackbar, SnackbarContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import Content from "./Content";
 import Footer from "./Footer";
 import Header from "./Header";
 import Navigator from "./Navigator";
 import { customTheme, drawerWidth } from "./_styles";
-import { useNavigate } from "react-router-dom";
 
-const Layout = ({ title }) => {
+const Layout = ({ title, snackbar, setSnackbar }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const navigate = useNavigate();
 
@@ -55,6 +56,16 @@ const Layout = ({ title }) => {
           </Box>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ open: false, message: "" })}
+      >
+        <SnackbarContent
+          sx={{ backgroundColor: "#009be5" }}
+          message={snackbar.message}
+        />
+      </Snackbar>
     </ThemeProvider>
   );
 };

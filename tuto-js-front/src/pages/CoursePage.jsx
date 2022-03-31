@@ -1,57 +1,79 @@
+import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import CourseSaveDialog from "../components/dialog/CourseSaveDialog";
 import DataTable from "../components/table/DataTable";
-import Add from "@mui/icons-material/Add";
-import Edit from "@mui/icons-material/Edit";
-import Delete from "@mui/icons-material/Delete";
-import { listAll } from "../services/CourseService";
-import { tableIconStyle } from "../styles";
+import { getColumns } from "../components/table/_columns";
+import { listAll, remove } from "../services/CourseService";
+import { getArrayWithId } from "../utils/arrayHelper";
 
-const CoursePage = ({ setTitle }) => {
+const CoursePage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
-
-  const columns = [
-    { field: "id", headerName: "#", flex: 0.5 },
-    { field: "code", headerName: "Código", flex: 1 },
-    { field: "name", headerName: "Nombre", flex: 2 },
-    {
-      field: "edit",
-      headerName: "Editar",
-      flex: 0.5,
-      renderCell: () => <Edit sx={tableIconStyle}></Edit>,
-    },
-    {
-      field: "delete",
-      headerName: "Eliminar",
-      flex: 0.5,
-      renderCell: () => <Delete sx={tableIconStyle}></Delete>,
-    },
-  ];
+  const [columns, setColumns] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState({ code: "", name: "" });
+  const [open, setOpen] = useState(false);
 
   const setLocalTitle = () => {
     setTitle("Cursos");
   };
 
   const listAllFromApi = () => {
-    listAll().then((data) => {
-      if (data.data) {
-        let rowsAux = data.data;
-        rowsAux.forEach((row, index) => {
-          row.id = index + 1;
-        });
-        setRows(rowsAux);
+    listAll().then(
+      (data) => {
+        if (data && data.data) {
+          setRows(getArrayWithId(data.data));
+        }
+      },
+      (error) => {
+        console.log(error);
       }
-    });
+    );
+  };
+
+  const removeFromApi = ({ row }) => {
+    remove(row._id).then(
+      (data) => {
+        setSnackbar({
+          open: true,
+          message: data.message ? data.message : "Error en el mensaje",
+        });
+        if (data && data.status === 1) {
+          listAllFromApi();
+        }
+      },
+      (error) => {
+        setSnackbar({ open: true, message: "Error en el servidor" });
+        console.log(error);
+      }
+    );
+  };
+
+  const openEdit = ({ row }) => {
+    setSelectedCourse(row);
+    setOpen(true);
+  };
+
+  const openAdd = () => {
+    setSelectedCourse({ code: "", name: "" });
+    setOpen(true);
   };
 
   useEffect(() => {
     setLocalTitle();
+    setColumns(getColumns("course", openEdit, removeFromApi));
     listAllFromApi();
   }, []);
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-      <Button variant="contained" sx={{ mb: 2 }}>
+      <CourseSaveDialog
+        course={selectedCourse}
+        open={open}
+        setOpen={setOpen}
+        reload={listAllFromApi}
+        setSnackbar={setSnackbar}
+      />
+      <Button variant="contained" sx={{ mb: 2 }} onClick={openAdd}>
         <Add />
         <Typography sx={{ mr: 1 }}>Agregar</Typography>
       </Button>
