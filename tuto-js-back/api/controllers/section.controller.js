@@ -28,7 +28,9 @@ export const update = async (req, res) => {
   try {
     let section = await Section.findById(req.body._id);
     section.code = req.body.code;
-    section.name = req.body.name;
+    section.period = req.body.period;
+    section.course = req.body.course;
+    section.teacher = req.body.teacher;
     const sectionSave = await section.save();
     res.json(createResponse(1, "Actualización exitosa", sectionSave));
   } catch (e) {
