@@ -21,6 +21,12 @@ const schemaCourse = {
       ref: "Tutor",
     },
   ],
+  tutorships: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tutorship",
+    },
+  ],
 };
 
 const Course = mongoose.model("Course", schemaCourse, "courses");

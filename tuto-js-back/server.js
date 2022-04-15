@@ -11,6 +11,7 @@ import {
   TopicRouter,
   TutorshipRouter,
   TutorRouter,
+  AdministratorRouter,
 } from "./api/routes/_index.js";
 
 dotenv.config();
@@ -42,6 +43,7 @@ app.use("/", SectionRouter);
 app.use("/", TopicRouter);
 app.use("/", TutorRouter);
 app.use("/", TutorshipRouter);
+app.use("/", AdministratorRouter);
 
 // Launch server
 app.listen(process.env.PORT || 3000, "0.0.0.0", () => {

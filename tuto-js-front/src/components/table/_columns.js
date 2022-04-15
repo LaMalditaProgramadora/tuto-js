@@ -1,5 +1,6 @@
-import Edit from "@mui/icons-material/Edit";
-import Delete from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ListIcon from "@mui/icons-material/List";
 import { tableIconStyle } from "./_styles";
 
 const getActionColumns = (onClickEdit, onClickDelete) => {
@@ -11,7 +12,10 @@ const getActionColumns = (onClickEdit, onClickDelete) => {
       filterable: false,
       sortable: false,
       renderCell: (rows) => (
-        <Edit sx={tableIconStyle} onClick={() => onClickEdit(rows)}></Edit>
+        <EditIcon
+          sx={tableIconStyle}
+          onClick={() => onClickEdit(rows)}
+        ></EditIcon>
       ),
     },
     {
@@ -21,10 +25,46 @@ const getActionColumns = (onClickEdit, onClickDelete) => {
       filterable: false,
       sortable: false,
       renderCell: (rows) => (
-        <Delete
+        <DeleteIcon
           sx={tableIconStyle}
           onClick={() => onClickDelete(rows)}
-        ></Delete>
+        ></DeleteIcon>
+      ),
+    },
+  ];
+};
+
+const getDeleteColumn = (onClickDelete) => {
+  return [
+    {
+      field: "delete",
+      headerName: "Eliminar",
+      flex: 0.25,
+      filterable: false,
+      sortable: false,
+      renderCell: (rows) => (
+        <DeleteIcon
+          sx={tableIconStyle}
+          onClick={() => onClickDelete(rows)}
+        ></DeleteIcon>
+      ),
+    },
+  ];
+};
+
+const getListColumn = (onClickList, listTitle) => {
+  return [
+    {
+      field: "list",
+      headerName: listTitle,
+      flex: 0.25,
+      filterable: false,
+      sortable: false,
+      renderCell: (rows) => (
+        <ListIcon
+          sx={tableIconStyle}
+          onClick={() => onClickList(rows)}
+        ></ListIcon>
       ),
     },
   ];
@@ -37,6 +77,12 @@ const courseColumns = [
 ];
 
 const teacherColumns = [
+  { field: "id", headerName: "#", flex: 0.125 },
+  { field: "code", headerName: "Código", flex: 1 },
+  { field: "fullName", headerName: "Nombre Completo", flex: 2 },
+];
+
+const tutorColumns = [
   { field: "id", headerName: "#", flex: 0.125 },
   { field: "code", headerName: "Código", flex: 1 },
   { field: "fullName", headerName: "Nombre Completo", flex: 2 },
@@ -64,7 +110,7 @@ const sectionColumns = [
   },
 ];
 
-export const getColumns = (route, onClickEdit, onClickDelete) => {
+export const getColumns = (route, onClickEdit, onClickDelete, onClickList) => {
   let columns = [];
   switch (route) {
     case "course":
@@ -74,13 +120,28 @@ export const getColumns = (route, onClickEdit, onClickDelete) => {
       columns = teacherColumns;
       break;
     case "section":
-      columns = sectionColumns;
+      columns = sectionColumns.concat(
+        getListColumn(onClickList, "Estudiantes")
+      );
       break;
     case "student":
       columns = studentColumns;
+    case "tutor":
+      columns = tutorColumns;
       break;
     default:
       break;
   }
   return columns.concat(getActionColumns(onClickEdit, onClickDelete));
+};
+
+export const getListColumns = (route, onClickDelete) => {
+  let columns = [];
+  switch (route) {
+    case "student":
+      columns = studentColumns.concat(getDeleteColumn(onClickDelete));
+    default:
+      break;
+  }
+  return columns;
 };

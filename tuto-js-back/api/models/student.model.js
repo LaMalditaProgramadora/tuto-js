@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 const schemaStudent = {
   code: String,
   fullName: String,
+  phone: String,
+  email: String,
+  password: String,
   sections: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,6 +16,12 @@ const schemaStudent = {
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tutorship",
+    },
+  ],
+  courses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
     },
   ],
 };

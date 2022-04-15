@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const schemaTutorship = {
   registerDate: String,
-  attendedDate: String,
-  attended: Boolean,
+  date: Date,
+  attendedDate: Date,
   reason: String,
   solution: String,
   course: {

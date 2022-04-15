@@ -1,6 +1,7 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import SectionListDialog from "../components/dialog/SectionListDialog";
 import SectionSaveDialog from "../components/dialog/SectionSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
@@ -17,6 +18,7 @@ const SectionPage = ({ setTitle, setSnackbar }) => {
     course: { _id: "0", code: "", name: "" },
   });
   const [open, setOpen] = useState(false);
+  const [openStudents, setOpenStudents] = useState(false);
 
   const setLocalTitle = () => {
     setTitle("Secciones");
@@ -58,14 +60,19 @@ const SectionPage = ({ setTitle, setSnackbar }) => {
     setOpen(true);
   };
 
-  const openAdd = () => {
+  const openCreate = () => {
     setSelectedSection({ code: "", name: "" });
     setOpen(true);
   };
 
+  const openList = ({ row }) => {
+    setSelectedSection(row);
+    setOpenStudents(true);
+  };
+
   useEffect(() => {
     setLocalTitle();
-    setColumns(getColumns("section", openEdit, removeFromApi));
+    setColumns(getColumns("section", openEdit, removeFromApi, openList));
     listAllFromApi();
   }, []);
 
@@ -78,7 +85,13 @@ const SectionPage = ({ setTitle, setSnackbar }) => {
         reload={listAllFromApi}
         setSnackbar={setSnackbar}
       />
-      <Button variant="contained" sx={{ mb: 2 }} onClick={openAdd}>
+      <SectionListDialog
+        section={selectedSection}
+        open={openStudents}
+        setOpen={setOpenStudents}
+        setSnackbar={setSnackbar}
+      />
+      <Button variant="contained" sx={{ mb: 2 }} onClick={openCreate}>
         <Add />
         <Typography sx={{ mr: 1 }}>Agregar</Typography>
       </Button>

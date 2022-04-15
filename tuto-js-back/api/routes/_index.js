@@ -5,6 +5,7 @@ import SectionRouter from "./section.router.js";
 import TopicRouter from "./topic.router.js";
 import TutorshipRouter from "./tutorship.router.js";
 import TutorRouter from "./tutor.router.js";
+import AdministratorRouter from "./administrator.router.js";
 
 export {
   CourseRouter,
@@ -14,4 +15,5 @@ export {
   TopicRouter,
   TutorshipRouter,
   TutorRouter,
+  AdministratorRouter,
 };

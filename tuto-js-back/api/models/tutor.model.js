@@ -4,8 +4,8 @@ const schemaTutor = {
   code: String,
   fullName: String,
   password: String,
-  status: Boolean,
-  course: [
+  email: String,
+  courses: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",

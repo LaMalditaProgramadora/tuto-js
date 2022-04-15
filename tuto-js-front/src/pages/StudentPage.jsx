@@ -56,7 +56,7 @@ const StudentPage = ({ setTitle, setSnackbar }) => {
     setOpen(true);
   };
 
-  const openAdd = () => {
+  const openCreate = () => {
     setSelectedStudent({ code: "", fullName: "" });
     setOpen(true);
   };
@@ -76,7 +76,7 @@ const StudentPage = ({ setTitle, setSnackbar }) => {
         reload={listAllFromApi}
         setSnackbar={setSnackbar}
       />
-      <Button variant="contained" sx={{ mb: 2 }} onClick={openAdd}>
+      <Button variant="contained" sx={{ mb: 2 }} onClick={openCreate}>
         <Add />
         <Typography sx={{ mr: 1 }}>Agregar</Typography>
       </Button>
