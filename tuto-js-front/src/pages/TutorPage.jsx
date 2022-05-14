@@ -1,17 +1,30 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TutorSaveDialog from "../components/dialog/TutorSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/TutorService";
 import { getArrayWithId } from "../utils/arrayHelper";
+import { getUser } from "../utils/storage";
 
 const TutorPage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [selectedTutor, setSelectedTutor] = useState({ code: "", name: "" });
+  const [selectedTutor, setSelectedTutor] = useState({
+    code: "",
+    name: "",
+    email: "",
+    password: "",
+  });
   const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const validateUser = () => {
+    console.log(getUser() || getUser().type !== "administrator");
+    if (getUser() === undefined) navigate("/login", { replace: true });
+  };
 
   const setLocalTitle = () => {
     setTitle("Tutores");
@@ -59,6 +72,7 @@ const TutorPage = ({ setTitle, setSnackbar }) => {
   };
 
   useEffect(() => {
+    validateUser();
     setLocalTitle();
     setColumns(getColumns("tutor", openEdit, removeFromApi));
     listAllFromApi();

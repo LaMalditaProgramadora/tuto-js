@@ -1,5 +1,6 @@
 import { Course, Tutor } from "../models/_index.js";
 import { createResponse } from "../utils/response.js";
+import mongoose from "mongoose";
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
@@ -15,7 +16,7 @@ export const listAll = async (req, res) => {
 export const listTutors = async (req, res) => {
   const { _id: _id } = req.query;
   let course = await Course.findById(_id).populate("tutors");
-  res.json(createResponse(1, "Tutores encontrados", section));
+  res.json(createResponse(1, "Tutores encontrados", course));
 };
 
 export const create = async (req, res) => {
@@ -24,6 +25,7 @@ export const create = async (req, res) => {
     const courseSave = await course.save();
     res.json(createResponse(1, "Registro exitoso", courseSave));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al registrar", null));
   }
 };
@@ -36,7 +38,8 @@ export const update = async (req, res) => {
     const courseSave = await course.save();
     res.json(createResponse(1, "Actualización exitosa", courseSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    console.log(e);
+    res.json(createResponse(-1, "Error al actualizar", null));
   }
 };
 
@@ -55,6 +58,7 @@ export const remove = async (req, res) => {
       res.json(createResponse(1, "Eliminación exitosa", null));
     }
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al eliminar", null));
   }
 };
@@ -81,6 +85,7 @@ export const addTutor = async (req, res) => {
       );
     }
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al agregar tutor", null));
   }
 };
@@ -96,6 +101,7 @@ export const removeTutor = async (req, res) => {
     const tutorSave = await tutor.save();
     res.json(createResponse(1, "Eliminación exitosa", null));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al eliminar", null));
   }
 };

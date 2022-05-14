@@ -3,6 +3,7 @@ import { createResponse } from "../utils/response.js";
 import { encryptPassword, comparePassword } from "../utils/encrypt.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -40,25 +41,27 @@ export const login = async (req, res) => {
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
-  let tutor = await Tutor.findById(_id);
+  let tutor = await Tutor.findById(_id).select("-password");
   res.json(createResponse(1, "Tutor encontrado", tutor));
 };
 
 export const listAll = async (req, res) => {
-  let tutors = await Tutor.find();
+  let tutors = await Tutor.find().select("-password");
   res.json(createResponse(1, "Tutores encontrados", tutors));
 };
 
 export const listByCourse = async (req, res) => {
   const { _id: _id } = req.query;
-  let tutor = await Tutor.findById({ courses: [mongoose.Types.ObjectId(_id)] });
+  let tutor = await Tutor.find({
+    courses: [mongoose.Types.ObjectId(_id)],
+  }).select("-password");
   res.json(createResponse(1, "Tutores encontrados", tutor));
 };
 
 export const create = async (req, res) => {
   try {
     let tutor = new Tutor(req.body);
-    tutor.pasword = encryptPassword(tutor.password);
+    tutor.password = encryptPassword(tutor.password);
     const tutorSave = await tutor.save();
     res.json(createResponse(1, "Registro exitoso", null));
   } catch (e) {

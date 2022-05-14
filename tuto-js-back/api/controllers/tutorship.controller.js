@@ -5,9 +5,10 @@ import {
   Topic,
   Student,
   Course,
-  Teacher
+  Teacher,
 } from "../models/_index.js";
 import { createResponse } from "../utils/response.js";
+import mongoose from "mongoose";
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
@@ -16,25 +17,45 @@ export const listById = async (req, res) => {
 };
 
 export const listAll = async (req, res) => {
-  let tutorships = await Tutorship.find();
+  let tutorships = await Tutorship.find()
+    .populate("course")
+    .populate("section")
+    .populate("topic")
+    .populate("tutor")
+    .populate("student");
   res.json(createResponse(1, "Tutorías encontradas", tutorships));
 };
 
 export const listByStudent = async (req, res) => {
   const { _id: _id } = req.query;
-  let tutorships = await Tutorship.find({ student: _id });
+  let tutorships = await Tutorship.find({ student: _id })
+    .populate("course")
+    .populate("section")
+    .populate("topic")
+    .populate("tutor")
+    .populate("student");
   res.json(createResponse(1, "Tutorías encontradas", tutorships));
 };
 
 export const listByTutor = async (req, res) => {
   const { _id: _id } = req.query;
-  let tutorships = await Tutorship.find({ tutor: _id });
+  let tutorships = await Tutorship.find({ tutor: _id })
+    .populate("course")
+    .populate("section")
+    .populate("topic")
+    .populate("tutor")
+    .populate("student");
   res.json(createResponse(1, "Tutorías encontradas", tutorships));
 };
 
 export const listByTeacher = async (req, res) => {
   const { _id: _id } = req.query;
-  let tutorships = await Tutorship.find({ teacher: _id });
+  let tutorships = await Tutorship.find({ teacher: _id })
+    .populate("course")
+    .populate("section")
+    .populate("topic")
+    .populate("tutor")
+    .populate("student");
   res.json(createResponse(1, "Tutorías encontradas", tutorships));
 };
 
@@ -78,10 +99,11 @@ export const update = async (req, res) => {
     let tutorship = await Tutorship.findById(req.body._id);
     tutorship.attendedDate = req.body.attendedDate;
     tutorship.solution = req.body.solution;
+    tutorship.attended = req.body.attended;
     const tutorshipSave = await tutorship.save();
     res.json(createResponse(1, "Actualización exitosa", tutorshipSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    res.json(createResponse(-1, "Error al actualizar", null));
   }
 };
 
@@ -129,6 +151,7 @@ export const remove = async (req, res) => {
     const tutorshipDelete = await Tutorship.deleteOne({ _id: _id });
     res.json(createResponse(1, "Eliminación exitosa", null));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al eliminar", null));
   }
 };

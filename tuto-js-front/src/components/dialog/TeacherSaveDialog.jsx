@@ -21,6 +21,7 @@ const TeacherSaveDialog = ({ teacher, open, setOpen, reload, setSnackbar }) => {
     const teacherDto = {
       code: formData.get("code"),
       fullName: formData.get("fullName"),
+      email: formData.get("email"),
     };
     if (teacher._id) {
       teacherDto._id = teacher._id;
@@ -42,6 +43,7 @@ const TeacherSaveDialog = ({ teacher, open, setOpen, reload, setSnackbar }) => {
         }
       );
     } else {
+      teacherDto.password = formData.get("password");
       create(teacherDto).then(
         (data) => {
           setIsLoading(false);
@@ -79,23 +81,50 @@ const TeacherSaveDialog = ({ teacher, open, setOpen, reload, setSnackbar }) => {
             margin="dense"
             id="code"
             label="Código"
-            type="code"
+            type="text"
             fullWidth
             name="code"
             defaultValue={teacher.code}
             sx={{ mb: 2 }}
           />
+          {teacher._id ? (
+            <></>
+          ) : (
+            <TextField
+              required
+              margin="dense"
+              id="password"
+              label="Contraseña"
+              type="text"
+              fullWidth
+              name="password"
+              defaultValue={teacher.password}
+              sx={{ mb: 2 }}
+            />
+          )}
           <TextField
             required
             margin="dense"
             id="fullName"
             label="Nombre Completo"
-            type="fullName"
+            type="text"
             fullWidth
             name="fullName"
             defaultValue={teacher.fullName}
             sx={{ mb: 2 }}
           />
+          <TextField
+            required
+            margin="dense"
+            id="email"
+            label="Correo electrónico"
+            type="text"
+            fullWidth
+            name="email"
+            defaultValue={teacher.email}
+            sx={{ mb: 2 }}
+          />
+
           <DialogActions sx={{ pr: 0 }}>
             <Button onClick={handleClose} disabled={isLoading}>
               Cancelar

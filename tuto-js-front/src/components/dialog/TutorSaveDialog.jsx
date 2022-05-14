@@ -21,6 +21,7 @@ const TutorSaveDialog = ({ tutor, open, setOpen, reload, setSnackbar }) => {
     const tutorDto = {
       code: formData.get("code"),
       fullName: formData.get("fullName"),
+      email: formData.get("email"),
     };
     if (tutor._id) {
       tutorDto._id = tutor._id;
@@ -42,6 +43,7 @@ const TutorSaveDialog = ({ tutor, open, setOpen, reload, setSnackbar }) => {
         }
       );
     } else {
+      tutorDto.password = formData.get("password");
       create(tutorDto).then(
         (data) => {
           setIsLoading(false);
@@ -85,6 +87,21 @@ const TutorSaveDialog = ({ tutor, open, setOpen, reload, setSnackbar }) => {
             defaultValue={tutor.code}
             sx={{ mb: 2 }}
           />
+          {tutor._id ? (
+            <></>
+          ) : (
+            <TextField
+              required
+              margin="dense"
+              id="password"
+              label="Contraseña"
+              type="text"
+              fullWidth
+              name="password"
+              defaultValue={tutor.password}
+              sx={{ mb: 2 }}
+            />
+          )}
           <TextField
             required
             margin="dense"
@@ -94,6 +111,17 @@ const TutorSaveDialog = ({ tutor, open, setOpen, reload, setSnackbar }) => {
             fullWidth
             name="fullName"
             defaultValue={tutor.fullName}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="email"
+            label="Correo electrónico"
+            type="text"
+            fullWidth
+            name="email"
+            defaultValue={tutor.email}
             sx={{ mb: 2 }}
           />
           <DialogActions sx={{ pr: 0 }}>

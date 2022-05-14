@@ -4,17 +4,17 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
+  Typography
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/LoginService";
-import { removeUser, setUser } from "../utils/storage";
+import { resetPassword } from "../services/ResetPasswordService";
+import { removeUser } from "../utils/storage";
 
-const LoginPage = ({ setSnackbar }) => {
+const ResetPasswordPage = ({ setSnackbar }) => {
   const navigate = useNavigate();
   const initLocalStorage = () => {
     removeUser();
@@ -29,19 +29,12 @@ const LoginPage = ({ setSnackbar }) => {
     const formData = new FormData(event.currentTarget);
     const user = {
       code: formData.get("code"),
-      password: formData.get("password"),
     };
     if (user.username !== "" && user.password !== "") {
-      login(formData.get("type"), user).then((data) => {
+      resetPassword(formData.get("type"), user).then((data) => {
         setSnackbar({ open: true, message: data.message });
         if (data.status === 1) {
-          setUser(
-            formData.get("type"),
-            data.data._id,
-            data.data.code,
-            "Bearer " + data.data.token.toString()
-          );
-          navigate("/tuto/tutorship", { replace: true });
+          navigate("/login", { replace: true });
         }
       });
     } else {
@@ -51,7 +44,9 @@ const LoginPage = ({ setSnackbar }) => {
 
   return (
     <>
-      <Typography sx={{ mb: 2 }}>L o g i n</Typography>
+      <Typography sx={{ mb: 2 }}>
+        R e s e t e a r &nbsp; C o n s t r a s e ñ a
+      </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <FormControl fullWidth>
           <InputLabel id="courtypeLabelseLabel">Tipo de Usuario</InputLabel>
@@ -88,17 +83,6 @@ const LoginPage = ({ setSnackbar }) => {
           autoComplete="username"
           sx={{ mb: 2 }}
         />
-        <TextField
-          margin="dense"
-          required
-          fullWidth
-          name="password"
-          label="Contraseña"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          sx={{ mb: 2 }}
-        />
         <Box sx={{ textAlign: "center" }}>
           <Button
             fullWidth
@@ -106,11 +90,11 @@ const LoginPage = ({ setSnackbar }) => {
             type="submit"
             sx={{ mt: 3, mb: 2, textTransform: "none" }}
           >
-            <Typography>Iniciar Sesión</Typography>
+            <Typography>Enviar correo</Typography>
           </Button>
           <br></br>
-          <Link href="/resetPassword" variant="body2">
-            Resetear Contraseña
+          <Link href="/login" variant="body2">
+            Volver
           </Link>
         </Box>
         <br></br>
@@ -119,4 +103,4 @@ const LoginPage = ({ setSnackbar }) => {
   );
 };
 
-export default LoginPage;
+export default ResetPasswordPage;

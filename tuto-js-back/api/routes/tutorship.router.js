@@ -1,7 +1,10 @@
 import express from "express";
 
-import { TutorshipController } from "../controllers/_index.js";
+import { TutorshipController, ImageController } from "../controllers/_index.js";
 import { validateToken } from "../middlewares/_index.js";
+import multer from "multer";
+
+const fileUpload = multer();
 
 const {
   listAll,
@@ -14,6 +17,8 @@ const {
   listByTutor,
 } = TutorshipController;
 
+const { uploadTutorshipImage } = ImageController;
+
 const router = express.Router();
 
 const tutorshipRouter = {
@@ -25,6 +30,7 @@ const tutorshipRouter = {
   CREATE: "/tutorship/create",
   UPDATE: "/tutorship/update",
   REMOVE: "/tutorship/remove",
+  UPLOAD_IMAGE: "/tutorship/uploadImage",
 };
 
 router.get(tutorshipRouter.LIST_ALL, listAll);
@@ -35,5 +41,11 @@ router.get(tutorshipRouter.LIST_BY_ID, listById);
 router.post(tutorshipRouter.CREATE, create);
 router.put(tutorshipRouter.UPDATE, update);
 router.delete(tutorshipRouter.REMOVE, remove);
+router.delete(tutorshipRouter.REMOVE, remove);
+router.post(
+  tutorshipRouter.UPLOAD_IMAGE,
+  fileUpload.single("image"),
+  uploadTutorshipImage
+);
 
 export default router;

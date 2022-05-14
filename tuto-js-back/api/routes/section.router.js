@@ -12,7 +12,8 @@ const {
   addStudent,
   listStudents,
   removeStudent,
-  listByCourse
+  listByCourse,
+  listByStudent
 } = SectionController;
 
 const router = express.Router();
@@ -21,6 +22,7 @@ const sectionRouter = {
   LIST_ALL: "/section/listAll",
   LIST_BY_ID: "/section/listById",
   LIST_BY_COURSE: "/section/listByCourse",
+  LIST_BY_STUDENT: "/section/listByStudent",
   CREATE: "/section/create",
   UPDATE: "/section/update",
   REMOVE: "/section/remove",
@@ -32,6 +34,7 @@ const sectionRouter = {
 router.get(sectionRouter.LIST_ALL, listAll);
 router.get(sectionRouter.LIST_BY_ID, listById);
 router.get(sectionRouter.LIST_BY_COURSE, listByCourse);
+router.get(sectionRouter.LIST_BY_STUDENT, listByStudent);
 router.post(sectionRouter.CREATE, create);
 router.put(sectionRouter.UPDATE, update);
 router.delete(sectionRouter.REMOVE, remove);

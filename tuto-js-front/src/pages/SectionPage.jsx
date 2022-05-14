@@ -1,12 +1,14 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SectionListDialog from "../components/dialog/SectionListDialog";
 import SectionSaveDialog from "../components/dialog/SectionSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/SectionService";
 import { getSectionsWithTeacherAndCourse } from "../utils/arrayHelper";
+import { getUser } from "../utils/storage";
 
 const SectionPage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
@@ -19,6 +21,12 @@ const SectionPage = ({ setTitle, setSnackbar }) => {
   });
   const [open, setOpen] = useState(false);
   const [openStudents, setOpenStudents] = useState(false);
+
+  const navigate = useNavigate();
+  const validateUser = () => {
+    if (!getUser() || getUser().type !== "administrator")
+      navigate("/login", { replace: true });
+  };
 
   const setLocalTitle = () => {
     setTitle("Secciones");
@@ -71,6 +79,7 @@ const SectionPage = ({ setTitle, setSnackbar }) => {
   };
 
   useEffect(() => {
+    validateUser();
     setLocalTitle();
     setColumns(getColumns("section", openEdit, removeFromApi, openList));
     listAllFromApi();

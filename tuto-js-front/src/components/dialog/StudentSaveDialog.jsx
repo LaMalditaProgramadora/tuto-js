@@ -21,6 +21,7 @@ const StudentSaveDialog = ({ student, open, setOpen, reload, setSnackbar }) => {
     const studentDto = {
       code: formData.get("code"),
       fullName: formData.get("fullName"),
+      email: formData.get("email"),
     };
     if (student._id) {
       studentDto._id = student._id;
@@ -42,6 +43,7 @@ const StudentSaveDialog = ({ student, open, setOpen, reload, setSnackbar }) => {
         }
       );
     } else {
+      studentDto.password = formData.get("password");
       create(studentDto).then(
         (data) => {
           setIsLoading(false);
@@ -85,6 +87,21 @@ const StudentSaveDialog = ({ student, open, setOpen, reload, setSnackbar }) => {
             defaultValue={student.code}
             sx={{ mb: 2 }}
           />
+          {student._id ? (
+            <></>
+          ) : (
+            <TextField
+              required
+              margin="dense"
+              id="password"
+              label="Contraseña"
+              type="text"
+              fullWidth
+              name="password"
+              defaultValue={student.password}
+              sx={{ mb: 2 }}
+            />
+          )}
           <TextField
             required
             margin="dense"
@@ -94,6 +111,17 @@ const StudentSaveDialog = ({ student, open, setOpen, reload, setSnackbar }) => {
             fullWidth
             name="fullName"
             defaultValue={student.fullName}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="email"
+            label="Correo electrónico"
+            type="text"
+            fullWidth
+            name="email"
+            defaultValue={student.email}
             sx={{ mb: 2 }}
           />
           <DialogActions sx={{ pr: 0 }}>

@@ -6,6 +6,7 @@ import * as TopicController from "./topic.controller.js";
 import * as TutorController from "./tutor.controller.js";
 import * as TutorshipController from "./tutorship.controller.js";
 import * as AdministratorController from "./administrator.controller.js";
+import * as ImageController from "./image.controller.js";
 
 export {
   CourseController,
@@ -16,4 +17,5 @@ export {
   TutorController,
   TutorshipController,
   AdministratorController,
+  ImageController
 };

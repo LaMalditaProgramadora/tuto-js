@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import AuthLayout from "./components/layout/AuthLayout";
 import CoursePage from "./pages/CoursePage";
 import LoginPage from "./pages/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import SectionPage from "./pages/SectionPage";
 import StudentPage from "./pages/StudentPage";
 import TeacherPage from "./pages/TeacherPage";
@@ -17,10 +19,14 @@ export const AppRouter = () => {
   return useRoutes([
     {
       path: "/",
-      //element: <LoginTheme />,
+      element: <AuthLayout snackbar={snackbar} setSnackbar={setSnackbar} />,
       children: [
         { path: "/", element: <Navigate to="/login" /> },
-        { path: "login", element: <LoginPage /> },
+        { path: "login", element: <LoginPage setSnackbar={setSnackbar} /> },
+        {
+          path: "resetPassword",
+          element: <ResetPasswordPage setSnackbar={setSnackbar} />,
+        },
       ],
     },
     {

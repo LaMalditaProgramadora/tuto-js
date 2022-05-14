@@ -5,6 +5,20 @@ export const listAll = async () => {
   return data;
 };
 
+export const listByCourse = async (_id) => {
+  const data = await httpClient
+    .get(`/section/listByCourse?_id=${_id}`)
+    .then((v) => v.data);
+  return data;
+};
+
+export const listByStudent = async (_id) => {
+  const data = await httpClient
+    .get(`/section/listByStudent?_id=${_id}`)
+    .then((v) => v.data);
+  return data;
+};
+
 export const create = async (sectionDto) => {
   const data = await httpClient
     .post(`/section/create`, sectionDto)

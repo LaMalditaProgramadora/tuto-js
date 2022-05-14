@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const schemaTutorship = {
-  registerDate: String,
-  date: Date,
+  registerDate: Date,
   attendedDate: Date,
+  attended: Boolean,
   reason: String,
   solution: String,
+  image: String,
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
@@ -25,6 +26,10 @@ const schemaTutorship = {
   student: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Student",
+  },
+  teacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
   },
 };
 

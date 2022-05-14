@@ -22,9 +22,9 @@ const courseRouter = {
   CREATE: "/course/create",
   UPDATE: "/course/update",
   REMOVE: "/course/remove",
-  ADD_TUTOR: "/section/addTutor",
-  LIST_TUTORS: "/section/listTutors",
-  REMOVE_TUTOR: "/section/removeTutor",
+  ADD_TUTOR: "/course/addTutor",
+  LIST_TUTORS: "/course/listTutors",
+  REMOVE_TUTOR: "/course/removeTutor",
 };
 
 router.get(courseRouter.LIST_ALL, listAll);

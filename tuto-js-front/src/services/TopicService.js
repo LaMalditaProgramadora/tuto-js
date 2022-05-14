@@ -1,34 +1,34 @@
 import httpClient from "../utils/httpClient";
 
 export const listAll = async () => {
-  const data = await httpClient.get(`/tutor/listAll`).then((v) => v.data);
+  const data = await httpClient.get(`/topic/listAll`).then((v) => v.data);
   return data;
 };
 
 export const listByCourse = async (_id) => {
   const data = await httpClient
-    .get(`/tutor/listByCourse?_id=${_id}`)
+    .get(`/topic/listByCourse?_id=${_id}`)
     .then((v) => v.data);
   return data;
 };
 
-export const create = async (tutorDto) => {
+export const create = async (topicDto) => {
   const data = await httpClient
-    .post(`/tutor/create`, tutorDto)
+    .post(`/topic/create`, topicDto)
     .then((v) => v.data);
   return data;
 };
 
-export const update = async (tutorDto) => {
+export const update = async (topicDto) => {
   const data = await httpClient
-    .put(`/tutor/update`, tutorDto)
+    .put(`/topic/update`, topicDto)
     .then((v) => v.data);
   return data;
 };
 
 export const remove = async (_id) => {
   const data = await httpClient
-    .delete(`/tutor/remove?_id=${_id}`)
+    .delete(`/topic/remove?_id=${_id}`)
     .then((v) => v.data);
   return data;
 };

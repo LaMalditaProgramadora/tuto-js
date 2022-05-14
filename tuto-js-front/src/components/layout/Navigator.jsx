@@ -7,6 +7,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import * as React from "react";
+import { getUser } from "../../utils/storage";
 import { categories } from "./_categories";
 import { drawerWidth, itemCategory, itemWithoutHover } from "./_styles";
 
@@ -14,6 +15,9 @@ const Navigator = ({ title, changeTitle }) => {
   const selectCategory = (c) => {
     changeTitle(c);
   };
+
+  const thisCategories =
+    getUser().type === "administrator" ? categories : [categories[0]];
 
   return (
     <Drawer
@@ -32,7 +36,7 @@ const Navigator = ({ title, changeTitle }) => {
         >
           T U T O
         </ListItem>
-        {categories.map(({ id, children }) => (
+        {thisCategories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>

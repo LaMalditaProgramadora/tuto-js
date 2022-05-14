@@ -11,17 +11,11 @@ import {
   Select,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { addStudent } from "../../services/SectionService";
-import { listAll } from "../../services/StudentService";
+import { addTutor } from "../../services/CourseService";
+import { listAll } from "../../services/TutorService";
 
-const SectionAddDialog = ({
-  idSection,
-  open,
-  setOpen,
-  reload,
-  setSnackbar,
-}) => {
-  const [students, setStudents] = useState([]);
+const CourseAddDialog = ({ idCourse, open, setOpen, reload, setSnackbar }) => {
+  const [tutors, setTutors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
@@ -32,7 +26,7 @@ const SectionAddDialog = ({
     listAll().then(
       (data) => {
         if (data && data.data) {
-          setStudents(data.data);
+          setTutors(data.data);
         }
       },
       (error) => {
@@ -45,11 +39,11 @@ const SectionAddDialog = ({
     setIsLoading(true);
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const sectionDto = {
-      idSection: idSection,
-      idStudent: formData.get("student"),
+    const courseDto = {
+      idCourse: idCourse,
+      idTutor: formData.get("tutor"),
     };
-    addStudent(sectionDto).then(
+    addTutor(courseDto).then(
       (data) => {
         setIsLoading(false);
         setSnackbar({
@@ -82,24 +76,24 @@ const SectionAddDialog = ({
         component="form"
         onSubmit={handleSubmit}
       >
-        <DialogTitle>E s t u d i a n t e</DialogTitle>
+        <DialogTitle>T u t o r</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mb: 3 }}>
             <Grid item xs={12} sx={{ mt: 1 }}>
               <FormControl fullWidth>
-                <InputLabel id="studentLabel">Estudiante</InputLabel>
+                <InputLabel id="tutorLabel">Tutor</InputLabel>
                 <Select
-                  labelId="studentLabel"
-                  id="student"
-                  label="Estudiante"
+                  labelId="tutorLabel"
+                  id="tutor"
+                  label="Tutor"
                   required
-                  name="student"
+                  name="tutor"
                   defaultValue=""
                 >
-                  {students.map((student) => {
+                  {tutors.map((tutor) => {
                     return (
-                      <MenuItem key={student._id} value={student._id}>
-                        {student.code}
+                      <MenuItem key={tutor._id} value={tutor._id}>
+                        {tutor.code}
                       </MenuItem>
                     );
                   })}
@@ -121,4 +115,4 @@ const SectionAddDialog = ({
   );
 };
 
-export default SectionAddDialog;
+export default CourseAddDialog;

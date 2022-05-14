@@ -17,7 +17,17 @@ export const listAll = async (req, res) => {
 
 export const listByCourse = async (req, res) => {
   const { _id: _id } = req.query;
-  let sections = await Section.find({ course: _id });
+  let sections = await Section.find({
+    course: mongoose.Types.ObjectId(_id),
+  }).populate("course");
+  res.json(createResponse(1, "Secciones encontradas", sections));
+};
+
+export const listByStudent = async (req, res) => {
+  const { _id: _id } = req.query;
+  let sections = await Section.find({
+    students: [mongoose.Types.ObjectId(_id)],
+  }).populate("course").populate("teacher");
   res.json(createResponse(1, "Secciones encontradas", sections));
 };
 
@@ -100,7 +110,6 @@ export const addStudent = async (req, res) => {
     if (students.includes(body.idStudent)) {
       res.json(createResponse(-1, "Estudiante ya agregado", null));
     } else {
-
       section.students.push(body.idStudent);
       const sectionSave = await section.save();
 

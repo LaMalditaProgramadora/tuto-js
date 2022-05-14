@@ -1,11 +1,13 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import StudentSaveDialog from "../components/dialog/StudentSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/StudentService";
 import { getArrayWithId } from "../utils/arrayHelper";
+import { getUser } from "../utils/storage";
 
 const StudentPage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
@@ -15,6 +17,12 @@ const StudentPage = ({ setTitle, setSnackbar }) => {
     fullName: "",
   });
   const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const validateUser = () => {
+    if (!getUser() || getUser().type !== "administrator")
+      navigate("/login", { replace: true });
+  };
 
   const setLocalTitle = () => {
     setTitle("Estudiantes");
@@ -62,6 +70,7 @@ const StudentPage = ({ setTitle, setSnackbar }) => {
   };
 
   useEffect(() => {
+    validateUser();
     setLocalTitle();
     setColumns(getColumns("student", openEdit, removeFromApi));
     listAllFromApi();

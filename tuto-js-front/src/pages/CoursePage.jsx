@@ -1,17 +1,26 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CourseListDialog from "../components/dialog/CourseListDialog";
 import CourseSaveDialog from "../components/dialog/CourseSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/CourseService";
 import { getArrayWithId } from "../utils/arrayHelper";
+import { getUser } from "../utils/storage";
 
 const CoursePage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({ code: "", name: "" });
   const [open, setOpen] = useState(false);
+  const [openTutors, setOpenTutors] = useState(false);
+
+  const navigate = useNavigate();
+  const validateUser = () => {
+    if (!getUser()) navigate("/login", { replace: true });
+  };
 
   const setLocalTitle = () => {
     setTitle("Cursos");
@@ -58,9 +67,15 @@ const CoursePage = ({ setTitle, setSnackbar }) => {
     setOpen(true);
   };
 
+  const openList = ({ row }) => {
+    setSelectedCourse(row);
+    setOpenTutors(true);
+  };
+
   useEffect(() => {
+    validateUser();
     setLocalTitle();
-    setColumns(getColumns("course", openEdit, removeFromApi));
+    setColumns(getColumns("course", openEdit, removeFromApi, openList));
     listAllFromApi();
   }, []);
 
@@ -71,6 +86,12 @@ const CoursePage = ({ setTitle, setSnackbar }) => {
         open={open}
         setOpen={setOpen}
         reload={listAllFromApi}
+        setSnackbar={setSnackbar}
+      />
+      <CourseListDialog
+        course={selectedCourse}
+        open={openTutors}
+        setOpen={setOpenTutors}
         setSnackbar={setSnackbar}
       />
       <Button variant="contained" sx={{ mb: 2 }} onClick={openCreate}>

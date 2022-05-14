@@ -14,26 +14,33 @@ export const login = async (req, res) => {
   if (administrator === null) {
     res.json(createResponse(0, "Código incorrecto", null));
   } else {
-    if (comparePassword(body.password, administrator.password)) {
-      jwt.sign(
-        { exp: Math.floor(Date.now() / 1000) + 36000, _id: administrator._id },
-        process.env.SECRET_KEY,
-        (error, token) => {
-          if (!error) {
-            const administratorDto = {
-              _id: administrator._id,
-              code: administrator.code,
-              token: token,
-            };
-            res.json(createResponse(1, "Login exitoso", administratorDto));
-          } else {
-            console.log(error);
-            res.json(createResponse(-1, "Error en token", null));
-          }
-        }
-      );
+    if (administrator.active === false) {
+      res.json(createResponse(0, "El administrador no se encuentra activo", null));
     } else {
-      res.json(createResponse(-1, "Contraseña incorrecta", null));
+      if (comparePassword(body.password, administrator.password)) {
+        jwt.sign(
+          {
+            exp: Math.floor(Date.now() / 1000) + 36000,
+            _id: administrator._id,
+          },
+          process.env.SECRET_KEY,
+          (error, token) => {
+            if (!error) {
+              const administratorDto = {
+                _id: administrator._id,
+                code: administrator.code,
+                token: token,
+              };
+              res.json(createResponse(1, "Login exitoso", administratorDto));
+            } else {
+              console.log(error);
+              res.json(createResponse(-1, "Error en token", null));
+            }
+          }
+        );
+      } else {
+        res.json(createResponse(-1, "Contraseña incorrecta", null));
+      }
     }
   }
 };
@@ -63,7 +70,7 @@ export const resetPassword = async () => {
 export const create = async (req, res) => {
   try {
     let administrator = new Administrator(req.body);
-    administrator.pasword = encryptPassword(administrator.password);
+    administrator.password = encryptPassword(administrator.password);
     administrator.active = false;
     const administratorSave = await administrator.save();
     res.json(createResponse(1, "Registro exitoso", null));

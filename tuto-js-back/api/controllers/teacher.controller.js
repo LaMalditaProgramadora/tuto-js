@@ -40,21 +40,23 @@ export const login = async (req, res) => {
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
-  let teacher = await Teacher.findById(_id);
+  let teacher = await Teacher.findById(_id).select("-password");
   res.json(createResponse(1, "Profesor encontrado", teacher));
 };
 
 export const listAll = async (req, res) => {
-  let teachers = await Teacher.find();
+  let teachers = await Teacher.find().select("-password");
   res.json(createResponse(1, "Profesores encontrados", teachers));
 };
 
 export const create = async (req, res) => {
   try {
     const teacher = new Teacher(req.body);
+    teacher.password = encryptPassword(teacher.password);
     const teacherSave = await teacher.save();
     res.json(createResponse(1, "Registro exitoso", null));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al registrar", null));
   }
 };
@@ -77,6 +79,7 @@ export const resetPassword = async () => {
       }
     }
   } catch {
+    console.log(e);
     res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
@@ -90,6 +93,7 @@ export const update = async (req, res) => {
     const teacherSave = await teacher.save();
     res.json(createResponse(1, "Actualización exitosa", null));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al registrar", null));
   }
 };
@@ -107,6 +111,7 @@ export const remove = async (req, res) => {
       res.json(createResponse(1, "Eliminación exitosa", null));
     }
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al eliminar", null));
   }
 };

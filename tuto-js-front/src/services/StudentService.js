@@ -1,8 +1,13 @@
 import httpClient from "../utils/httpClient";
 
 export const listAll = async () => {
+  const data = await httpClient.get(`/student/listAll`).then((v) => v.data);
+  return data;
+};
+
+export const listCourses = async (_id) => {
   const data = await httpClient
-    .get(`/student/listAll`)
+    .get(`/student/listCourses?_id=${_id}`)
     .then((v) => v.data);
   return data;
 };

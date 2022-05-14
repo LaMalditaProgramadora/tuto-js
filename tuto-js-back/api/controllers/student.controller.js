@@ -42,25 +42,27 @@ export const login = async (req, res) => {
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
-  let student = await Student.findById(_id);
+  let student = await Student.findById(_id).select("-password");
   res.json(createResponse(1, "Estudiante encontrado", student));
 };
 
 export const listAll = async (req, res) => {
-  let students = await Student.find();
+  let students = await Student.find().select("-password");
   res.json(createResponse(1, "Estudiantes encontrados", students));
 };
 
 export const listCourses = async (req, res) => {
   const { _id: _id } = req.query;
-  let student = await Student.findById(_id).populate("courses");
+  let student = await Student.findById(_id)
+    .select("-password")
+    .populate("courses");
   res.json(createResponse(1, "Estudiante encontrado", student));
 };
 
 export const create = async (req, res) => {
   try {
     const student = new Student(req.body);
-    student.pasword = encryptPassword(tutor.password);
+    student.password = encryptPassword(student.password);
     const studentSave = await student.save();
     res.json(createResponse(1, "Registro exitoso", null));
   } catch (e) {

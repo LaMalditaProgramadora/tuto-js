@@ -1,5 +1,5 @@
 import Logout from "@mui/icons-material/Logout";
-import { ListItem } from "@mui/material";
+import { ListItem, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -7,9 +7,25 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import PropTypes from "prop-types";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { itemCategory, itemWithoutHover } from "./_styles";
+import { getUser } from "../../utils/storage";
 
 const Header = ({ title }) => {
+  const code = getUser().code;
+  const navigate = useNavigate();
+  const logout = () => {
+    navigate("/login", { replace: true });
+  };
+
+  const alterCode = (codeString) => {
+    let codeAux = "";
+    for (let i = 0; i < codeString.length; i++) {
+      codeAux = codeAux.concat(codeString[i]).concat(" ");
+    }
+    return codeAux;
+  };
+
   return (
     <React.Fragment>
       <AppBar color="primary" position="sticky" elevation={0}>
@@ -29,8 +45,11 @@ const Header = ({ title }) => {
               </ListItem>
             </Grid>
             <Grid item>
+              <Typography>{alterCode(code)}</Typography>
+            </Grid>
+            <Grid item>
               <Tooltip title="Cerrar Sesión">
-                <IconButton color="inherit">
+                <IconButton color="inherit" onClick={logout}>
                   <Logout />
                 </IconButton>
               </Tooltip>

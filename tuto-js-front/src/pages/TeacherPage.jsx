@@ -1,17 +1,29 @@
 import Add from "@mui/icons-material/Add";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TeacherSaveDialog from "../components/dialog/TeacherSaveDialog";
 import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/TeacherService";
 import { getArrayWithId } from "../utils/arrayHelper";
+import { getUser } from "../utils/storage";
 
 const TeacherPage = ({ setTitle, setSnackbar }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [selectedTeacher, setSelectedTeacher] = useState({ code: "", name: "" });
+  const [selectedTeacher, setSelectedTeacher] = useState({
+    code: "",
+    name: "",
+    password: "",
+    email: "",
+  });
   const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const validateUser = () => {
+    if (!getUser() || getUser().type !== "administrator") navigate("/login", { replace: true });
+  };
 
   const setLocalTitle = () => {
     setTitle("Profesores");
@@ -59,6 +71,7 @@ const TeacherPage = ({ setTitle, setSnackbar }) => {
   };
 
   useEffect(() => {
+    validateUser();
     setLocalTitle();
     setColumns(getColumns("teacher", openEdit, removeFromApi));
     listAllFromApi();

@@ -1,14 +1,15 @@
 import { Topic, Course } from "../models/_index.js";
 import { createResponse } from "../utils/response.js";
+import mongoose from "mongoose";
 
 export const listById = async (req, res) => {
   const { _id: _id } = req.query;
-  let topic = await Topic.findById(_id);
+  let topic = await Topic.findById(_id).populate("course");;
   res.json(createResponse(1, "Tema encontrado", topic));
 };
 
 export const listAll = async (req, res) => {
-  let topics = await Topic.find();
+  let topics = await Topic.find().populate("course");
   res.json(createResponse(1, "Temas encontrados", topics));
 };
 
