@@ -20,12 +20,12 @@ const studentRouter = {
   RESET_PASSWORD: "/student/resetPassword",
 };
 
-router.get(studentRouter.LIST_ALL, listAll);
-router.get(studentRouter.LIST_BY_ID, listById);
-router.get(studentRouter.LIST_COURSES, listCourses);
-router.post(studentRouter.CREATE, create);
-router.put(studentRouter.UPDATE, update);
-router.delete(studentRouter.REMOVE, remove);
+router.get(studentRouter.LIST_ALL, validateToken, listAll);
+router.get(studentRouter.LIST_BY_ID, validateToken, listById);
+router.get(studentRouter.LIST_COURSES, validateToken, listCourses);
+router.post(studentRouter.CREATE, validateToken, create);
+router.put(studentRouter.UPDATE, validateToken, update);
+router.delete(studentRouter.REMOVE, validateToken, remove);
 router.post(studentRouter.LOGIN, login);
 router.post(studentRouter.RESET_PASSWORD, resetPassword);
 

@@ -13,7 +13,7 @@ const {
   listStudents,
   removeStudent,
   listByCourse,
-  listByStudent
+  listByStudent,
 } = SectionController;
 
 const router = express.Router();
@@ -31,15 +31,15 @@ const sectionRouter = {
   REMOVE_STUDENT: "/section/removeStudent",
 };
 
-router.get(sectionRouter.LIST_ALL, listAll);
-router.get(sectionRouter.LIST_BY_ID, listById);
-router.get(sectionRouter.LIST_BY_COURSE, listByCourse);
-router.get(sectionRouter.LIST_BY_STUDENT, listByStudent);
-router.post(sectionRouter.CREATE, create);
-router.put(sectionRouter.UPDATE, update);
-router.delete(sectionRouter.REMOVE, remove);
-router.post(sectionRouter.ADD_STUDENT, addStudent);
-router.get(sectionRouter.LIST_STUDENTS, listStudents);
-router.delete(sectionRouter.REMOVE_STUDENT, removeStudent);
+router.get(sectionRouter.LIST_ALL, validateToken, listAll);
+router.get(sectionRouter.LIST_BY_ID, validateToken, listById);
+router.get(sectionRouter.LIST_BY_COURSE, validateToken, listByCourse);
+router.get(sectionRouter.LIST_BY_STUDENT, validateToken, listByStudent);
+router.post(sectionRouter.CREATE, validateToken, create);
+router.put(sectionRouter.UPDATE, validateToken, update);
+router.delete(sectionRouter.REMOVE, validateToken, remove);
+router.post(sectionRouter.ADD_STUDENT, validateToken, addStudent);
+router.get(sectionRouter.LIST_STUDENTS, validateToken, listStudents);
+router.delete(sectionRouter.REMOVE_STUDENT, validateToken, removeStudent);
 
 export default router;

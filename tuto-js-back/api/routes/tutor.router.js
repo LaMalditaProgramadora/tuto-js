@@ -3,8 +3,16 @@ import express from "express";
 import { TutorController } from "../controllers/_index.js";
 import { validateToken } from "../middlewares/_index.js";
 
-const { listAll, listById, create, update, remove, login, resetPassword, listByCourse } =
-  TutorController;
+const {
+  listAll,
+  listById,
+  create,
+  update,
+  remove,
+  login,
+  resetPassword,
+  listByCourse,
+} = TutorController;
 
 const router = express.Router();
 
@@ -19,12 +27,12 @@ const tutorRouter = {
   RESET_PASSWORD: "/tutor/resetPassword",
 };
 
-router.get(tutorRouter.LIST_ALL, listAll);
-router.get(tutorRouter.LIST_BY_ID, listById);
-router.get(tutorRouter.LIST_BY_COURSE, listByCourse);
-router.post(tutorRouter.CREATE, create);
-router.put(tutorRouter.UPDATE, update);
-router.delete(tutorRouter.REMOVE, remove);
+router.get(tutorRouter.LIST_ALL, validateToken, listAll);
+router.get(tutorRouter.LIST_BY_ID, validateToken, listById);
+router.get(tutorRouter.LIST_BY_COURSE, validateToken, listByCourse);
+router.post(tutorRouter.CREATE, validateToken, create);
+router.put(tutorRouter.UPDATE, validateToken, update);
+router.delete(tutorRouter.REMOVE, validateToken, remove);
 router.post(tutorRouter.LOGIN, login);
 router.post(tutorRouter.RESET_PASSWORD, resetPassword);
 

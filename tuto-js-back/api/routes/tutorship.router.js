@@ -33,15 +33,14 @@ const tutorshipRouter = {
   UPLOAD_IMAGE: "/tutorship/uploadImage",
 };
 
-router.get(tutorshipRouter.LIST_ALL, listAll);
-router.get(tutorshipRouter.LIST_BY_STUDENT, listByStudent);
-router.get(tutorshipRouter.LIST_BY_TEACHER, listByTeacher);
-router.get(tutorshipRouter.LIST_BY_TUTOR, listByTutor);
-router.get(tutorshipRouter.LIST_BY_ID, listById);
-router.post(tutorshipRouter.CREATE, create);
-router.put(tutorshipRouter.UPDATE, update);
-router.delete(tutorshipRouter.REMOVE, remove);
-router.delete(tutorshipRouter.REMOVE, remove);
+router.get(tutorshipRouter.LIST_ALL, validateToken, listAll);
+router.get(tutorshipRouter.LIST_BY_STUDENT, validateToken, listByStudent);
+router.get(tutorshipRouter.LIST_BY_TEACHER, validateToken, listByTeacher);
+router.get(tutorshipRouter.LIST_BY_TUTOR, validateToken, listByTutor);
+router.get(tutorshipRouter.LIST_BY_ID, validateToken, listById);
+router.post(tutorshipRouter.CREATE, validateToken, create);
+router.put(tutorshipRouter.UPDATE, validateToken, update);
+router.delete(tutorshipRouter.REMOVE, validateToken, remove);
 router.post(
   tutorshipRouter.UPLOAD_IMAGE,
   fileUpload.single("image"),

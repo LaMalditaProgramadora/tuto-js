@@ -1,6 +1,8 @@
 import { Teacher } from "../models/_index.js";
 import { createResponse } from "../utils/response.js";
 import { encryptPassword, comparePassword } from "../utils/encrypt.js";
+import { generateString } from "../utils/randomString.js";
+import { sendMail } from "../utils/emailSender.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
@@ -61,24 +63,24 @@ export const create = async (req, res) => {
   }
 };
 
-export const resetPassword = async () => {
+export const resetPassword = async (req, res) => {
   try {
-    const { code: code } = req.query;
+    const code = req.body.code;
     let teacher = await Teacher.findOne({ code: code });
     if (teacher === null) {
-      res.json(createResponse(0, "No se encontró teacher", {}));
+      res.json(createResponse(0, "No se encontró teacher", null));
     } else {
       const password = generateString();
       teacher.password = encryptPassword(password);
       const teacherSave = await teacher.save();
       const result = await sendMail(teacher.email, password);
       if (result === true) {
-        res.json(createResponse(1, "Envío exitoso", {}));
+        res.json(createResponse(1, "Envío exitoso", null));
       } else {
-        res.json(createResponse(-1, "Error al enviar correo", {}));
+        res.json(createResponse(-1, "Error al enviar correo", null));
       }
     }
-  } catch {
+  } catch(e) {
     console.log(e);
     res.json(createResponse(-1, "Error en el servidor", null));
   }

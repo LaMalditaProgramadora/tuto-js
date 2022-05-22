@@ -1,10 +1,11 @@
-import { Student, Section } from "../models/_index.js";
-import { createResponse } from "../utils/response.js";
-import { sendMail } from "../utils/emailSender.js";
-import mongoose from "mongoose";
-import { encryptPassword, comparePassword } from "../utils/encrypt.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import { Section, Student } from "../models/_index.js";
+import { comparePassword, encryptPassword } from "../utils/encrypt.js";
+import { createResponse } from "../utils/response.js";
+import { generateString } from "../utils/randomString.js";
+import { sendMail } from "../utils/emailSender.js";
 
 dotenv.config();
 
@@ -71,24 +72,25 @@ export const create = async (req, res) => {
   }
 };
 
-export const resetPassword = async () => {
+export const resetPassword = async (req, res) => {
   try {
-    const { code: code } = req.query;
+    const code = req.body.code;
     let student = await Student.findOne({ code: code });
     if (student === null) {
-      res.json(createResponse(0, "No se encontró estudiante", {}));
+      res.json(createResponse(0, "No se encontró estudiante", null));
     } else {
       const password = generateString();
       student.password = encryptPassword(password);
       const studentSave = await student.save();
       const result = await sendMail(student.email, password);
       if (result === true) {
-        res.json(createResponse(1, "Envío exitoso", {}));
+        res.json(createResponse(1, "Envío exitoso", null));
       } else {
-        res.json(createResponse(-1, "Error al enviar correo", {}));
+        res.json(createResponse(-1, "Error al enviar correo", null));
       }
     }
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error en el servidor", null));
   }
 };

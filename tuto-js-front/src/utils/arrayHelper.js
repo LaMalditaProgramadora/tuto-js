@@ -22,7 +22,7 @@ export const getTopicsWithCourse = (topics) => {
   return topics;
 };
 
-const formatDate = (date) => {
+export const formatDate = (date) => {
   if (date)
     return (
       date[0] + date[1] + date[2] + date[3] + "/" + date[5] + date[6] + "/" + date[8] + date[9]

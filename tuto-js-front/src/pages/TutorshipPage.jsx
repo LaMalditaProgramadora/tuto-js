@@ -18,6 +18,10 @@ const TutorshipPage = ({ setTitle, setSnackbar }) => {
     registerDate: new Date(),
     attended: false,
     course: { _id: "0", code: "", name: "" },
+    section: { _id: "0", code: "" },
+    student: { _id: "0", code: "", fullName: "" },
+    tutor: { _id: "0", code: "", fullName: "" },
+    topic: { _id: "0", description: "" },
   });
   const [openCreate, setOpenCreate] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
@@ -82,7 +86,15 @@ const TutorshipPage = ({ setTitle, setSnackbar }) => {
   useEffect(() => {
     validateUser();
     setLocalTitle();
-    setColumns(getColumns("tutorship", openUpdateDialog, removeFromApi, null, openDetailDialog));
+    setColumns(
+      getColumns(
+        "tutorship",
+        openUpdateDialog,
+        removeFromApi,
+        null,
+        openDetailDialog
+      )
+    );
     listAllFromApi();
   }, []);
 

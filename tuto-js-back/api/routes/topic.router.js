@@ -17,11 +17,11 @@ const topicRouter = {
   REMOVE: "/topic/remove",
 };
 
-router.get(topicRouter.LIST_ALL, listAll);
-router.get(topicRouter.LIST_BY_ID, listById);
-router.get(topicRouter.LIST_BY_COURSE, listByCourse);
-router.post(topicRouter.CREATE, create);
-router.put(topicRouter.UPDATE, update);
-router.delete(topicRouter.REMOVE, remove);
+router.get(topicRouter.LIST_ALL, validateToken, listAll);
+router.get(topicRouter.LIST_BY_ID, validateToken, listById);
+router.get(topicRouter.LIST_BY_COURSE, validateToken, listByCourse);
+router.post(topicRouter.CREATE, validateToken, create);
+router.put(topicRouter.UPDATE, validateToken, update);
+router.delete(topicRouter.REMOVE, validateToken, remove);
 
 export default router;

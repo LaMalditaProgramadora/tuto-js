@@ -1,5 +1,5 @@
 import httpClient from "../utils/httpClient";
-import { getUser } from "../utils/storage";
+import { getUser, getToken } from "../utils/storage";
 
 export const listAll = async () => {
   let listType = "listAll";
@@ -24,28 +24,44 @@ export const listAll = async () => {
   }
 
   const data = await httpClient
-    .get(`/tutorship/${listType}`)
+    .get(`/tutorship/${listType}`, {
+      headers: {
+        Authorization: getToken(),
+      },
+    })
     .then((v) => v.data);
   return data;
 };
 
 export const create = async (tutorshipDto) => {
   const data = await httpClient
-    .post(`/tutorship/create`, tutorshipDto)
+    .post(`/tutorship/create`, tutorshipDto, {
+      headers: {
+        Authorization: getToken(),
+      },
+    })
     .then((v) => v.data);
   return data;
 };
 
 export const update = async (tutorshipDto) => {
   const data = await httpClient
-    .put(`/tutorship/update`, tutorshipDto)
+    .put(`/tutorship/update`, tutorshipDto, {
+      headers: {
+        Authorization: getToken(),
+      },
+    })
     .then((v) => v.data);
   return data;
 };
 
 export const remove = async (_id) => {
   const data = await httpClient
-    .delete(`/tutorship/remove?_id=${_id}`)
+    .delete(`/tutorship/remove?_id=${_id}`, {
+      headers: {
+        Authorization: getToken(),
+      },
+    })
     .then((v) => v.data);
   return data;
 };

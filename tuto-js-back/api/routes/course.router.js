@@ -27,13 +27,13 @@ const courseRouter = {
   REMOVE_TUTOR: "/course/removeTutor",
 };
 
-router.get(courseRouter.LIST_ALL, listAll);
-router.get(courseRouter.LIST_BY_ID, listById);
-router.post(courseRouter.CREATE, create);
-router.put(courseRouter.UPDATE, update);
-router.delete(courseRouter.REMOVE, remove);
-router.post(courseRouter.ADD_TUTOR, addTutor);
-router.get(courseRouter.LIST_TUTORS, listTutors);
-router.delete(courseRouter.REMOVE_TUTOR, removeTutor);
+router.get(courseRouter.LIST_ALL, validateToken, listAll);
+router.get(courseRouter.LIST_BY_ID, validateToken, listById);
+router.post(courseRouter.CREATE, validateToken, create);
+router.put(courseRouter.UPDATE, validateToken, update);
+router.delete(courseRouter.REMOVE, validateToken, remove);
+router.post(courseRouter.ADD_TUTOR, validateToken, addTutor);
+router.get(courseRouter.LIST_TUTORS, validateToken, listTutors);
+router.delete(courseRouter.REMOVE_TUTOR, validateToken, removeTutor);
 
 export default router;

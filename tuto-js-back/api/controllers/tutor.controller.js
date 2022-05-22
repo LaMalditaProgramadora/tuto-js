@@ -1,6 +1,8 @@
 import { Tutor } from "../models/_index.js";
 import { createResponse } from "../utils/response.js";
 import { encryptPassword, comparePassword } from "../utils/encrypt.js";
+import { generateString } from "../utils/randomString.js";
+import { sendMail } from "../utils/emailSender.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -65,28 +67,30 @@ export const create = async (req, res) => {
     const tutorSave = await tutor.save();
     res.json(createResponse(1, "Registro exitoso", null));
   } catch (e) {
+    console.log(e);
     res.json(createResponse(-1, "Error al registrar", null));
   }
 };
 
-export const resetPassword = async () => {
+export const resetPassword = async (req, res) => {
   try {
-    const { code: code } = req.query;
+    const code = req.body.code;
     let tutor = await Tutor.findOne({ code: code });
     if (tutor === null) {
-      res.json(createResponse(0, "No se encontró tutor", {}));
+      res.json(createResponse(0, "No se encontró tutor", null));
     } else {
       const password = generateString();
       tutor.password = encryptPassword(password);
       const tutorSave = await tutor.save();
       const result = await sendMail(tutor.email, password);
       if (result === true) {
-        res.json(createResponse(1, "Envío exitoso", {}));
+        res.json(createResponse(1, "Envío exitoso", null));
       } else {
-        res.json(createResponse(-1, "Error al enviar correo", {}));
+        res.json(createResponse(-1, "Error al enviar correo", null));
       }
     }
-  } catch {
+  } catch(e) {
+    console.log(e);
     res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
