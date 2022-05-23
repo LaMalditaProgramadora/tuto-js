@@ -63,7 +63,7 @@ server.listen(process.env.PORT || 3000, "0.0.0.0", () => {
 
 // Socket.io
 io.on("connection", function (socket) {
-  console.log("A user is connected");
+  console.log("New connection");
 
   socket.on("create tutorship", function () {
     console.log("server: create tutorship");

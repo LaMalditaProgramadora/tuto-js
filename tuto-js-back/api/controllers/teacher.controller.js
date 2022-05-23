@@ -9,46 +9,61 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 export const login = async (req, res) => {
-  const body = req.body;
-  let teacher = await Teacher.findOne({
-    code: body.code,
-  });
-  if (teacher === null) {
-    res.json(createResponse(0, "Código incorrecto", null));
-  } else {
-    if (comparePassword(body.password, teacher.password)) {
-      jwt.sign(
-        { exp: Math.floor(Date.now() / 1000) + 36000, _id: teacher._id },
-        process.env.SECRET_KEY,
-        (error, token) => {
-          if (!error) {
-            const teacherDto = {
-              _id: teacher._id,
-              code: teacher.code,
-              token: token,
-            };
-            res.json(createResponse(1, "Login exitoso", teacherDto));
-          } else {
-            console.log(error);
-            res.json(createResponse(-1, "Error en token", null));
-          }
-        }
-      );
+  try {
+    const body = req.body;
+    let teacher = await Teacher.findOne({
+      code: body.code,
+    });
+    if (teacher === null) {
+      res.json(createResponse(0, "Código incorrecto", null));
     } else {
-      res.json(createResponse(-1, "Contraseña incorrecta", null));
+      if (comparePassword(body.password, teacher.password)) {
+        jwt.sign(
+          { exp: Math.floor(Date.now() / 1000) + 36000, _id: teacher._id },
+          process.env.SECRET_KEY,
+          (error, token) => {
+            if (!error) {
+              const teacherDto = {
+                _id: teacher._id,
+                code: teacher.code,
+                token: token,
+              };
+              res.json(createResponse(1, "Login exitoso", teacherDto));
+            } else {
+              console.log(error);
+              res.json(createResponse(-1, "Error en token", null));
+            }
+          }
+        );
+      } else {
+        res.json(createResponse(0, "Contraseña incorrecta", null));
+      }
     }
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
 export const listById = async (req, res) => {
-  const { _id: _id } = req.query;
-  let teacher = await Teacher.findById(_id).select("-password");
-  res.json(createResponse(1, "Profesor encontrado", teacher));
+  try {
+    const { _id: _id } = req.query;
+    let teacher = await Teacher.findById(_id).select("-password");
+    res.json(createResponse(1, "Profesor encontrado", teacher));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listAll = async (req, res) => {
-  let teachers = await Teacher.find().select("-password");
-  res.json(createResponse(1, "Profesores encontrados", teachers));
+  try {
+    let teachers = await Teacher.find().select("-password");
+    res.json(createResponse(1, "Profesores encontrados", teachers));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const create = async (req, res) => {
@@ -56,10 +71,10 @@ export const create = async (req, res) => {
     const teacher = new Teacher(req.body);
     teacher.password = encryptPassword(teacher.password);
     const teacherSave = await teacher.save();
-    res.json(createResponse(1, "Registro exitoso", null));
+    res.json(createResponse(1, "Registro exitoso", teacherSave));
   } catch (e) {
     console.log(e);
-    res.json(createResponse(-1, "Error al registrar", null));
+    rres.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -80,7 +95,7 @@ export const resetPassword = async (req, res) => {
         res.json(createResponse(-1, "Error al enviar correo", null));
       }
     }
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     res.json(createResponse(-1, "Error en el servidor", null));
   }
@@ -93,10 +108,10 @@ export const update = async (req, res) => {
     teacher.fullName = req.body.fullName;
     teacher.email = req.body.email;
     const teacherSave = await teacher.save();
-    res.json(createResponse(1, "Actualización exitosa", null));
+    res.json(createResponse(1, "Actualización exitosa", teacherSave));
   } catch (e) {
     console.log(e);
-    res.json(createResponse(-1, "Error al registrar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -114,6 +129,6 @@ export const remove = async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.json(createResponse(-1, "Error al eliminar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };

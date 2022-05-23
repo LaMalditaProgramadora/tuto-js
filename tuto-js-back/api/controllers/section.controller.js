@@ -3,38 +3,65 @@ import { createResponse } from "../utils/response.js";
 import mongoose from "mongoose";
 
 export const listById = async (req, res) => {
-  const { _id: _id } = req.query;
-  let section = await Section.findById(_id)
-    .populate("teacher")
-    .populate("course");
-  res.json(createResponse(1, "Sección encontrada", section));
+  try {
+    const { _id: _id } = req.query;
+    let section = await Section.findById(_id)
+      .populate("teacher")
+      .populate("course");
+    res.json(createResponse(1, "Sección encontrada", section));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listAll = async (req, res) => {
-  let sections = await Section.find().populate("teacher").populate("course");
-  res.json(createResponse(1, "Secciones encontradas", sections));
+  try {
+    let sections = await Section.find().populate("teacher").populate("course");
+    res.json(createResponse(1, "Secciones encontradas", sections));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listByCourse = async (req, res) => {
-  const { _id: _id } = req.query;
-  let sections = await Section.find({
-    course: mongoose.Types.ObjectId(_id),
-  }).populate("course");
-  res.json(createResponse(1, "Secciones encontradas", sections));
+  try {
+    const { _id: _id } = req.query;
+    let sections = await Section.find({
+      course: mongoose.Types.ObjectId(_id),
+    }).populate("course");
+    res.json(createResponse(1, "Secciones encontradas", sections));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listByStudent = async (req, res) => {
-  const { _id: _id } = req.query;
-  let sections = await Section.find({
-    students: [mongoose.Types.ObjectId(_id)],
-  }).populate("course").populate("teacher");
-  res.json(createResponse(1, "Secciones encontradas", sections));
+  try {
+    const { _id: _id } = req.query;
+    let sections = await Section.find({
+      students: [mongoose.Types.ObjectId(_id)],
+    })
+      .populate("course")
+      .populate("teacher");
+    res.json(createResponse(1, "Secciones encontradas", sections));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listStudents = async (req, res) => {
-  const { _id: _id } = req.query;
-  let section = await Section.findById(_id).populate("students");
-  res.json(createResponse(1, "Estudiantes encontrados", section));
+  try {
+    const { _id: _id } = req.query;
+    let section = await Section.findById(_id).populate("students");
+    res.json(createResponse(1, "Estudiantes encontrados", section));
+  } catch (e) {
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const create = async (req, res) => {
@@ -52,7 +79,8 @@ export const create = async (req, res) => {
 
     res.json(createResponse(1, "Registro exitoso", sectionSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -66,7 +94,7 @@ export const update = async (req, res) => {
     const sectionSave = await section.save();
     res.json(createResponse(1, "Actualización exitosa", sectionSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -98,7 +126,7 @@ export const remove = async (req, res) => {
       res.json(createResponse(1, "Eliminación exitosa", null));
     }
   } catch (e) {
-    res.json(createResponse(-1, "Error al eliminar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -108,7 +136,7 @@ export const addStudent = async (req, res) => {
     const section = await Section.findById(body.idSection);
     const students = section.students.map((student) => student.toString());
     if (students.includes(body.idStudent)) {
-      res.json(createResponse(-1, "Estudiante ya agregado", null));
+      res.json(createResponse(0, "Estudiante ya agregado", null));
     } else {
       section.students.push(body.idStudent);
       const sectionSave = await section.save();
@@ -126,7 +154,7 @@ export const addStudent = async (req, res) => {
       );
     }
   } catch (e) {
-    res.json(createResponse(-1, "Error al agregar estudiante", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -145,6 +173,6 @@ export const removeStudent = async (req, res) => {
 
     res.json(createResponse(1, "Eliminación exitosa", null));
   } catch (e) {
-    res.json(createResponse(-1, "Error al eliminar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };

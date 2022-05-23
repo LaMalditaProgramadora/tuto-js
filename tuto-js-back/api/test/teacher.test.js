@@ -1,39 +1,38 @@
 import axios from "axios";
 
-describe("Tutor Tests", () => {
+describe("Teacher Tests", () => {
   const admin = {
     code: "admin",
     password: "1234",
   };
 
-  const tutor = {
-    code: "tcsijiru5",
-    fullName: "Jimena Ruiz Cerna",
+  const teacher = {
+    code: "profe3",
+    fullName: "Rosa Cobeñas",
     password: "1234",
-    email: "jyellow365@gmail.com",
+    email: "rosacob@gmail.com",
   };
 
-  let tutorSave = {};
-  const idCourse = "6289ba5409a3be1f17da4361";
+  let teacherSave = {};
   let token;
 
   const changePasswordUser = {
-    code: "tcsijiru2",
+    code: "profe2",
     password: "1234",
   };
 
   const activeUser = {
-    code: "tcsijiru",
+    code: "profe1",
     password: "1234",
   };
 
   const incorrectCodeUser = {
-    code: "tcsijiru3",
+    code: "profe4",
     password: "1234",
   };
 
   const incorrectPasswordUser = {
-    code: "tcsijiru",
+    code: "profe1",
     password: "12345",
   };
 
@@ -47,7 +46,7 @@ describe("Tutor Tests", () => {
 
   it("Test Login - Exitoso", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/login",
+      "http://localhost:3000/teacher/login",
       activeUser
     );
     expect(result.data.status).toEqual(1);
@@ -55,7 +54,7 @@ describe("Tutor Tests", () => {
 
   it("Test Login - Código Incorrecto", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/login",
+      "http://localhost:3000/teacher/login",
       incorrectCodeUser
     );
     expect(result.data.status).toEqual(0);
@@ -63,7 +62,7 @@ describe("Tutor Tests", () => {
 
   it("Test Login - Contraseña Incorrecta", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/login",
+      "http://localhost:3000/teacher/login",
       incorrectPasswordUser
     );
     expect(result.data.status).toEqual(0);
@@ -71,7 +70,7 @@ describe("Tutor Tests", () => {
 
   it("Test Reset Password - No encontrado", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/resetPassword",
+      "http://localhost:3000/teacher/resetPassword",
       { code: incorrectCodeUser.code }
     );
     expect(result.data.status).toEqual(0);
@@ -79,7 +78,7 @@ describe("Tutor Tests", () => {
 
   it("Test Reset Password - Exitoso", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/resetPassword",
+      "http://localhost:3000/teacher/resetPassword",
       { code: changePasswordUser.code }
     );
     expect(result.data.status).toEqual(1);
@@ -87,8 +86,8 @@ describe("Tutor Tests", () => {
 
   it("Test Create - Registro exitoso", async () => {
     const result = await axios.post(
-      "http://localhost:3000/tutor/create",
-      tutor,
+      "http://localhost:3000/teacher/create",
+      teacher,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,14 +95,14 @@ describe("Tutor Tests", () => {
       }
     );
     expect(result.data.status).toEqual(1);
-    tutorSave = result.data.data;
+    teacherSave = result.data.data;
   });
 
   it("Test Update - Actualización exitosa", async () => {
-    tutorSave.fullName = "Jimena Ruiz Cerna update";
+    teacherSave.fullName = "Rosa Cobeñas update";
     const result = await axios.put(
-      "http://localhost:3000/tutor/update",
-      tutorSave,
+      "http://localhost:3000/teacher/update",
+      teacherSave,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -111,13 +110,13 @@ describe("Tutor Tests", () => {
       }
     );
     expect(result.data.status).toEqual(1);
-    tutorSave = result.data.data;
+    teacherSave = result.data.data;
   });
 
   it("Test Update - Error en el servidor", async () => {
     const result = await axios.put(
-      "http://localhost:3000/tutor/update",
-      tutor,
+      "http://localhost:3000/teacher/update",
+      teacher,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -128,7 +127,7 @@ describe("Tutor Tests", () => {
   });
 
   it("Test List All - Listado exitoso", async () => {
-    const result = await axios.get("http://localhost:3000/tutor/listAll", {
+    const result = await axios.get("http://localhost:3000/teacher/listAll", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -138,7 +137,7 @@ describe("Tutor Tests", () => {
 
   it("Test List Id - Listado exitoso", async () => {
     const result = await axios.get(
-      `http://localhost:3000/tutor/listById?_id=${tutorSave._id}`,
+      `http://localhost:3000/teacher/listById?_id=${teacherSave._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -150,31 +149,7 @@ describe("Tutor Tests", () => {
 
   it("Test List Id - Error en el servidor", async () => {
     const result = await axios.get(
-      `http://localhost:3000/tutor/listById?_id=1234`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    expect(result.data.status).toEqual(-1);
-  });
-
-  it("Test List by Course - Listado exitoso", async () => {
-    const result = await axios.get(
-      `http://localhost:3000/tutor/listByCourse?_id=${idCourse}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    expect(result.data.status).toEqual(1);
-  });
-
-  it("Test List by Course - Error en el servidor", async () => {
-    const result = await axios.get(
-      `http://localhost:3000/tutor/listByCourse?_id=1234`,
+      `http://localhost:3000/teacher/listById?_id=1234`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -186,7 +161,7 @@ describe("Tutor Tests", () => {
 
   it("Test Remove - Eliminación exitosa", async () => {
     const result = await axios.delete(
-      `http://localhost:3000/tutor/remove?_id=${tutorSave._id}`,
+      `http://localhost:3000/teacher/remove?_id=${teacherSave._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -198,7 +173,7 @@ describe("Tutor Tests", () => {
 
   it("Test Remove - Error en el servidor", async () => {
     const result = await axios.delete(
-      `http://localhost:3000/tutor/remove?_id=1234`,
+      `http://localhost:3000/teacher/remove?_id=1234`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

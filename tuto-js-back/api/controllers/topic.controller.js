@@ -3,20 +3,32 @@ import { createResponse } from "../utils/response.js";
 import mongoose from "mongoose";
 
 export const listById = async (req, res) => {
-  const { _id: _id } = req.query;
-  let topic = await Topic.findById(_id).populate("course");;
-  res.json(createResponse(1, "Tema encontrado", topic));
+  try {
+    const { _id: _id } = req.query;
+    let topic = await Topic.findById(_id).populate("course");
+    res.json(createResponse(1, "Tema encontrado", topic));
+  } catch (e) {
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listAll = async (req, res) => {
-  let topics = await Topic.find().populate("course");
-  res.json(createResponse(1, "Temas encontrados", topics));
+  try {
+    let topics = await Topic.find().populate("course");
+    res.json(createResponse(1, "Temas encontrados", topics));
+  } catch (e) {
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const listByCourse = async (req, res) => {
-  const { _id: _id } = req.query;
-  let topics = await Topic.find({ course: _id });
-  res.json(createResponse(1, "Temas encontrados", topics));
+  try {
+    const { _id: _id } = req.query;
+    let topics = await Topic.find({ course: _id });
+    res.json(createResponse(1, "Temas encontrados", topics));
+  } catch (e) {
+    res.json(createResponse(-1, "Error en el servidor", null));
+  }
 };
 
 export const create = async (req, res) => {
@@ -30,7 +42,7 @@ export const create = async (req, res) => {
 
     res.json(createResponse(1, "Registro exitoso", topicSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -41,7 +53,7 @@ export const update = async (req, res) => {
     const topicSave = await topic.save();
     res.json(createResponse(1, "Actualización exitosa", topicSave));
   } catch (e) {
-    res.json(createResponse(-1, "Error al registrar", null));
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
 
@@ -50,17 +62,22 @@ export const remove = async (req, res) => {
     const { _id: _id } = req.query;
     const topic = await Topic.findById(_id);
     if (topic.tutorships.length === 0) {
-      const course = await Course.find({
+      const courses = await Course.find({
         topics: [mongoose.Types.ObjectId(_id)],
       });
-      course.topics.pull(mongoose.Types.ObjectId(_id));
-      const courseSave = await course.save();
+      console.log(courses)
+      for (let i = 0; i < courses.length; i++) {
+        courses[i].topics.pull(mongoose.Types.ObjectId(_id));
+        const courseSave = await courses[i].save();
+      }
       const topicDelete = await Topic.deleteOne({ _id: _id });
       res.json(createResponse(1, "Eliminación exitosa", null));
     } else {
       res.json(createResponse(0, "El tema tiene tutorías", null));
     }
   } catch (e) {
-    res.json(createResponse(-1, "Error al eliminar", null));
+    console.log("error Remove");
+    console.log(e);
+    res.json(createResponse(-1, "Error en el servidor", null));
   }
 };
