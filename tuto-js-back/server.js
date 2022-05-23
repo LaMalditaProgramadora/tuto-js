@@ -37,7 +37,7 @@ app.use(express.json());
 const server = createServer(app); 
 const io = new Server(server, {
   cors: {
-    origin: "process.env.REACT_APP_TUTO_HEROKU_URL",
+    origin: process.env.REACT_APP_TUTO_URL,
     methods: ["GET", "POST"]
   }
 });
