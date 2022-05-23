@@ -15,6 +15,7 @@ import { listByCourse as listTopicsByCourse } from "../../services/TopicService"
 import { listByCourse as listTutorsByCourse } from "../../services/TutorService";
 import { create, uploadImage } from "../../services/TutorshipService";
 import { getUser } from "../../utils/storage";
+import socket from "../../utils/socket";
 
 const TutorshipCreateDialog = ({ open, setOpen, reload, setSnackbar }) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -23,6 +24,7 @@ const TutorshipCreateDialog = ({ open, setOpen, reload, setSnackbar }) => {
   const [tutors, setTutors] = React.useState([]);
   const [disabled, setDisabled] = React.useState(true);
   const [file, setFile] = React.useState(null);
+
 
   const handleClose = () => {
     setDisabled(true);
@@ -114,6 +116,7 @@ const TutorshipCreateDialog = ({ open, setOpen, reload, setSnackbar }) => {
             message: data.message ? data.message : "Error en el mensaje",
           });
           if (data && data.status === 1) {
+            socket.emit('create tutorship');
             reload();
             setOpen(false);
           }

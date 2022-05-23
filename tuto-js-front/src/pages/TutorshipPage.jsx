@@ -9,6 +9,7 @@ import DataTable from "../components/table/DataTable";
 import { getColumns } from "../components/table/_columns";
 import { listAll, remove } from "../services/TutorshipService";
 import { getTutorshipssWithAllToStudent } from "../utils/arrayHelper";
+import socket from "../utils/socket";
 import { getUser } from "../utils/storage";
 
 const TutorshipPage = ({ setTitle, setSnackbar }) => {
@@ -79,7 +80,6 @@ const TutorshipPage = ({ setTitle, setSnackbar }) => {
   };
 
   const openCreateDialog = () => {
-    setSelectedTutorship({ code: "", name: "" });
     setOpenCreate(true);
   };
 
@@ -96,7 +96,12 @@ const TutorshipPage = ({ setTitle, setSnackbar }) => {
       )
     );
     listAllFromApi();
-  }, []);
+    
+    socket.on("update tutorship list", () => {
+      listAllFromApi();
+    });
+
+  }, [socket]);
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
