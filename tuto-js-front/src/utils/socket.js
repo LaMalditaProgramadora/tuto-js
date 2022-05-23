@@ -1,3 +1,6 @@
 import io from 'socket.io-client';
 
-export default io(`${process.env.REACT_APP_TUTO_HEROKU_URL}`);
+const url = `${process.env.REACT_APP_TUTO_HEROKU_EXT}`;
+console.log(url);
+
+export default io(url);
